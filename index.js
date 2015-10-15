@@ -27,7 +27,7 @@ exports.page_intake = function(event, context) {
         page_url_encoded: page_url_encoded },
       function() {
         console.log('done publishing');
-        context.succeed('v7; page_url: ' + page_url);
+        context.succeed('v8; page_url: ' + page_url);
       },
       context.fail
     );
@@ -52,7 +52,8 @@ var handle_event = function(data, succeed, fail) {
       console.log('handling page intake');
       httpreq.http(data.page_url, '', function(r) {
         console.log('page response:',r);
-        solecist.set(data.page_url_encoded, { http_data: r }, succeed, fail);
+        var encoded_response_data = new Buffer(r).toString('base64');
+        solecist.set(data.page_url_encoded, { http_data: encoded_response_data }, succeed, fail);
       }, fail);
       break;
     default:

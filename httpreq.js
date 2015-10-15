@@ -8,6 +8,11 @@ exports.http = function(options, body, success, fail) {
     var body = '';
     console.log('Status:', res.statusCode);
     console.log('Headers:', JSON.stringify(res.headers));
+    if(res.statusCode == 500) {
+      console.error('bad status, fail');
+      fail(500);
+      return;
+    };
     res.setEncoding('utf8');
     res.on('data', function(chunk) {
       body += chunk;

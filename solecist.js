@@ -5,8 +5,9 @@ var httpreq = require('./httpreq.js')
 exports.set = function(entity_id, data, success, fail) {
   console.log('setting',entity_id,data);
   var view_schema = {
-    'VERSION': 1,
-    'url': 'NEW'
+    'VERSION': 2,
+    'url': 'INHERIT',
+    'http_data': 'NEW'
   };
   var metadata = {};
   var post_data = {
