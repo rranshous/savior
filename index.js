@@ -50,10 +50,14 @@ var handle_event = function(data, succeed, fail) {
   switch(data.type) {
     case 'page_intake':
       console.log('handling page intake');
-      httpreq.http(data.page_url, '', function(r) {
+      httpreq.http(data.page_url, '', function(r,headers,status) {
         console.log('page response:',r.length);
         var encoded_response_data = new Buffer(r).toString('base64');
-        solecist.set(data.page_url_encoded, { http_data: encoded_response_data },
+        solecist.set(data.page_url_encoded,
+                     { http_data: encoded_response_data,
+                       response_status_code: status,
+                       response_headers: headers
+                     },
                      succeed, fail);
       }, fail);
       break;

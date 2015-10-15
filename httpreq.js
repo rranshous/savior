@@ -23,7 +23,7 @@ exports.http = function(options, body, success, fail) {
       if (res.headers['content-type'] === 'application/json') {
         result = JSON.parse(body);
       } else { result = body; };
-      success(result);
+      success(result, res.headers, res.statusCode);
     });
   });
   req.on('error', fail);

@@ -5,9 +5,11 @@ var httpreq = require('./httpreq.js')
 exports.set = function(entity_id, data, success, fail) {
   console.log('setting',entity_id,data);
   var view_schema = {
-    'VERSION': 2,
+    'VERSION': 3,
     'url': 'INHERIT',
-    'http_data': 'NEW'
+    'http_data': 'INHERIT',
+    'response_status_code': 'NEW',
+    'response_headers': 'NEW'
   };
   var metadata = {};
   var post_data = {
