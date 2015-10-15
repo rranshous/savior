@@ -50,7 +50,7 @@ var set = function(entity_id, data, success, fail) {
   console.log('done with set');
 }
 
-exports.handler = function(event, context) {
+exports.page_intake = function(event, context) {
   console.log('Received event:', JSON.stringify(event, null, 2));
   console.log('context:', JSON.stringify(context, null, 2));
 
@@ -65,3 +65,13 @@ exports.handler = function(event, context) {
     context.succeed('v6; page_url: ' + page_url);
   }, context.fail);
 };
+
+exports.handle_events = function(event, context) {
+  console.log('Received event:', JSON.stringify(event, null, 2));
+  event.Records.forEach(function(record) {
+      console.log('handling record', record);
+      var payload = new Buffer(record.kinesis.data, 'base64').toString('ascii');
+      console.log('Decoded payload:', payload);
+  });
+  context.succeed("Successfully processed " + event.Records.length + " records.");
+}
