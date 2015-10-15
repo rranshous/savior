@@ -54,15 +54,37 @@ var handle_event = function(data, succeed, fail) {
         console.log('page response:',r.length);
         var encoded_response_data = new Buffer(r).toString('base64');
         solecist.set(data.page_url_encoded,
-                     { http_data: encoded_response_data,
-                       response_status_code: status,
-                       response_headers: headers
-                     },
-                     succeed, fail);
+          { http_data: encoded_response_data,
+            response_status_code: status,
+            response_headers: headers
+          },
+          function() {
+            console.log('publishing page_downloaded');
+            kinfire.publish(data.hostname, mergeRecursive(data, {
+              type: 'page_downloaded',
+              status_code: status,
+            }), succeed, fail);
+          }, fail
+        );
       }, fail);
+      break;
+
+    case 'page_downloaded':
+      // download it's assets
+      console.log('page downloaded event here');
+      succeed();
       break;
     default:
       console.log('handling default');
       console.error('unknown event', data);
   }
+}
+
+function mergeRecursive(obj1, obj2) {
+  for (var p in obj2) {
+    if( obj2.hasOwnProperty(p)){
+      obj1[p] = typeof obj2[p] === 'object' ? mergeRecursive(obj1[p], obj2[p]) : obj2[p];
+    }
+  }
+  return obj1;
 }
